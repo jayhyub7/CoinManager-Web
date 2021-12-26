@@ -1,9 +1,17 @@
 package com.coin.manager.repository;
 
 import com.coin.manager.entity.ExternalWriter;
+import com.coin.manager.entity.ExternalWriterKey;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Repository
 public interface ExternalWriterRepository extends JpaRepository<ExternalWriter, Long> {
 
-    boolean existsByExternalSiteAndNickName(String externalSite, String nickName);
+    boolean existsById(ExternalWriterKey id);
+    @Query(value = "SELECT * FROM external_writer WHERE member_email = :memberEmail", nativeQuery = true)
+    List<ExternalWriter> findByMemberEmail(String memberEmail);
 }

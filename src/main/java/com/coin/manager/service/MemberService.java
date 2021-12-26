@@ -29,7 +29,7 @@ public class MemberService {
     @Transactional
     public Member update(MemberForm memberForm) throws Exception {
         Member member = Member.CreateMember(memberForm);
-        if (memberRepository.findByEmail(memberForm.getEmail()) == null) {
+        if (memberRepository.findByEmail(memberForm.getEmail()).isEmpty()) {
             throw new SuchNoMemberException();
         }
 

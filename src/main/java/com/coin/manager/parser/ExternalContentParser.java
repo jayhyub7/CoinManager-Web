@@ -1,5 +1,10 @@
 package com.coin.manager.parser;
 
-public interface ExternalContentParser {
-    public String getExternalId(String externalNickName);
+import com.coin.manager.entity.ExternalContent;
+
+public class ExternalContentParser {
+
+    public ExternalContent getNewContent(String nickName) {
+
+    }
 }

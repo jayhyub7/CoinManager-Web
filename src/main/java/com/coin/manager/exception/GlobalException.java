@@ -27,4 +27,8 @@ public class GlobalException {
     public JSONObject suchNoExternalSiteException(){
         return ErrorResponse.jsonErrorResponse(400, "설정되지 않은 외부사이트 입니다.");
     }
+    @ExceptionHandler(BusinessLogicException.class)
+    public JSONObject businessLogicException(String message){
+        return ErrorResponse.jsonErrorResponse(400, message);
+    }
 }

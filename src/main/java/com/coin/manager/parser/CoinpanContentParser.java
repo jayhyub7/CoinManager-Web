@@ -2,7 +2,6 @@ package com.coin.manager.parser;
 
 import com.coin.manager.entity.ExternalContent;
 import com.coin.manager.entity.ExternalContentKey;
-import com.coin.manager.parser.ExternalContentParser;
 import com.coin.manager.repository.ExternalContentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -10,7 +9,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +20,7 @@ public class CoinpanContentParser implements ExternalContentParser {
     //닉네임으로 검색 URL
     private static final String targetUrl = "https://coinpan.com/?act=&vid=&mid=free&category=&search_target=nick_name&search_keyword=";
     @Override
-    public String getExternalId(String nickName) {
+    public ExternalContent getNewContent(String nickName) {
 
         String url = targetUrl + nickName;
         try {
