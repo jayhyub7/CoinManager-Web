@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-public class CoinpanContentParser implements ExternalContentParser {
+public class CoinpanContentParser implements ContentParser {
 
     ExternalContentRepository externalContentRepository;
 

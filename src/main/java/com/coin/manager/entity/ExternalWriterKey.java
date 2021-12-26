@@ -12,9 +12,9 @@ public class ExternalWriterKey implements Serializable {
 
     public ExternalWriterKey(){}
 
-    public ExternalWriterKey(String memberEmail, String externalSite, String nickName) {
+    public ExternalWriterKey(String memberEmail, String externalSiteCode, String nickName) {
         this.memberEmail = memberEmail;
-        this.externalSite = externalSite;
+        this.externalSiteCode = externalSiteCode;
         this.nickName = nickName;
     }
 
@@ -22,7 +22,7 @@ public class ExternalWriterKey implements Serializable {
     private String memberEmail;
 
     @Column(length = 20, nullable = false)
-    private String externalSite;
+    private String externalSiteCode;
 
     @Column(length = 50, nullable = false)
     private String nickName;

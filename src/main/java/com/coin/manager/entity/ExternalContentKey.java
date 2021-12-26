@@ -12,13 +12,13 @@ public class ExternalContentKey implements Serializable {
 
     public ExternalContentKey() {}
 
-    public ExternalContentKey(String externalSite, String contentId) {
-        this.externalSite = externalSite;
+    public ExternalContentKey(String externalSiteCode, String contentId) {
+        this.externalSiteCode = externalSiteCode;
         this.contentId = contentId;
     }
 
     @Column(length = 20, nullable = false)
-    private String externalSite;
+    private String externalSiteCode;
 
     @Column(length = 20, nullable = false)
     private String contentId;

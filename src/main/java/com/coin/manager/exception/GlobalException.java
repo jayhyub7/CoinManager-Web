@@ -23,8 +23,8 @@ public class GlobalException {
     public JSONObject suchNoMemberException(){
         return ErrorResponse.jsonErrorResponse(400, "존재하지 않는 회원입니다.");
     }
-    @ExceptionHandler(SuchNoExternalSiteException.class)
-    public JSONObject suchNoExternalSiteException(){
+    @ExceptionHandler(SuchNoExternalSiteCodeException.class)
+    public JSONObject suchNoExternalSiteCodeException(){
         return ErrorResponse.jsonErrorResponse(400, "설정되지 않은 외부사이트 입니다.");
     }
     @ExceptionHandler(BusinessLogicException.class)

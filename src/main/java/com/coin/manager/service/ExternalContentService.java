@@ -3,13 +3,9 @@ package com.coin.manager.service;
 import com.coin.manager.entity.ExternalContent;
 import com.coin.manager.entity.ExternalWriter;
 import com.coin.manager.entity.ExternalWriterKey;
-import com.coin.manager.exception.BusinessLogicException;
 import com.coin.manager.exception.DuplicateExternalIdException;
-import com.coin.manager.exception.SuchNoExternalSiteException;
 import com.coin.manager.exception.SuchNoMemberException;
 import com.coin.manager.form.ExternalWriterForm;
-import com.coin.manager.parser.CoinpanContentParser;
-import com.coin.manager.parser.ExternalContentParser;
 import com.coin.manager.repository.ExternalWriterRepository;
 import com.coin.manager.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +22,19 @@ public class ExternalContentService {
     private final ExternalWriterRepository externalWriterRepository;
     private final MemberRepository memberRepository;
 
-    private final List<String> externalSiteList =Arrays.asList(new String[]{"COINPAN"});
+    private final List<String> externalSiteCodeList =Arrays.asList(new String[]{"COINPAN"});
 
     @Transactional
     public ExternalWriter regsterWriter(ExternalWriterForm externalWriterForm) throws Exception {
         String memberEmail = externalWriterForm.getMemberEmail();
-        String externalSite = externalWriterForm.getExternalSite();
+        String externalSiteCode = externalWriterForm.getExternalSiteCode();
         String nickName = externalWriterForm.getNickName();
 
         if (memberRepository.findByEmail(memberEmail).isEmpty()) {
             throw new SuchNoMemberException();
         }
 
-        ExternalWriterKey id = new ExternalWriterKey(memberEmail, externalSite, nickName);;
+        ExternalWriterKey id = new ExternalWriterKey(memberEmail, externalSiteCode, nickName);;
         if (externalWriterRepository.existsById(id)) {
             throw new DuplicateExternalIdException();
         }
@@ -60,8 +56,8 @@ public class ExternalContentService {
         }
 
         List<ExternalContent> newContentList = new ArrayList<>();
-        for (String externalSite : externalSiteList) {
-            
+        for (String externalSiteCode : externalSiteCodeList) {
+
         }
         return newContentList;
     }

@@ -14,7 +14,7 @@ public class ExternalWriter {
     public ExternalWriter(ExternalWriterForm externalWriterForm) {
         this.id = new ExternalWriterKey(
                 externalWriterForm.getMemberEmail(),
-                externalWriterForm.getExternalSite(),
+                externalWriterForm.getExternalSiteCode(),
                 externalWriterForm.getNickName()
                 );
     }
