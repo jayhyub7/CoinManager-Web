@@ -6,6 +6,9 @@ import com.coin.manager.entity.ExternalWriterKey;
 import com.coin.manager.exception.DuplicateExternalIdException;
 import com.coin.manager.exception.SuchNoMemberException;
 import com.coin.manager.form.ExternalWriterForm;
+import com.coin.manager.parser.ContentParser;
+import com.coin.manager.parser.ContentParserFactory;
+import com.coin.manager.repository.ExternalContentRepository;
 import com.coin.manager.repository.ExternalWriterRepository;
 import com.coin.manager.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import java.util.List;
 public class ExternalContentService {
     private final ExternalWriterRepository externalWriterRepository;
     private final MemberRepository memberRepository;
+    private final ExternalContentRepository externalContentRepository;
 
     private final List<String> externalSiteCodeList =Arrays.asList(new String[]{"COINPAN"});
 
@@ -50,15 +54,26 @@ public class ExternalContentService {
     }
 
     public List<ExternalContent> newContentList(String memberEmail) {
-
+        System.out.println(externalContentRepository);
+        System.out.println(externalContentRepository);
+        System.out.println(externalContentRepository);
+        System.out.println(externalContentRepository);
         if (memberRepository.findByEmail(memberEmail).isEmpty()) {
             throw new SuchNoMemberException();
         }
 
         List<ExternalContent> newContentList = new ArrayList<>();
         for (String externalSiteCode : externalSiteCodeList) {
-
+            ContentParser parser = ContentParserFactory.getContentParser(externalSiteCode);
+            List<ExternalWriter> writerList = externalWriterRepository.findByMemberMemberEmailAndExternalSiteCode(memberEmail, externalSiteCode);
+            for (ExternalWriter writer : writerList) {
+                ExternalContent newExternalContent = parser.getNewContent(writer);
+                if (newExternalContent != null) {
+                    newContentList.add(newExternalContent);
+                }
+            }
         }
+
         return newContentList;
     }
 }

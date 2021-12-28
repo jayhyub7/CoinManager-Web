@@ -2,26 +2,32 @@ package com.coin.manager.parser;
 
 import com.coin.manager.entity.ExternalContent;
 import com.coin.manager.entity.ExternalContentKey;
+import com.coin.manager.entity.ExternalWriter;
 import com.coin.manager.repository.ExternalContentRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-public class CoinpanContentParser implements ContentParser {
+@RequiredArgsConstructor
+public class CoinpanContentParser extends ContentParser {
 
-    ExternalContentRepository externalContentRepository;
+    private final ExternalContentRepository externalContentRepository;
 
     //닉네임으로 검색 URL
     private static final String targetUrl = "https://coinpan.com/?act=&vid=&mid=free&category=&search_target=nick_name&search_keyword=";
-    @Override
-    public ExternalContent getNewContent(String nickName) {
 
+    @Override
+    public ExternalContent getNewContent(ExternalWriter externalWriter) {
+
+        String nickName = externalWriter.getId().getNickName();
         String url = targetUrl + nickName;
         try {
             Document doc = Jsoup.connect(url).get();
@@ -43,8 +49,13 @@ public class CoinpanContentParser implements ContentParser {
                     String contentUrl = cols.select("td.title").first().child(0).attr("href");
                     String contentId = contentUrl.substring(contentUrl.lastIndexOf("=") + 1, contentUrl.length());
 
+                    ExternalContentKey id = new ExternalContentKey("COINPAN", nickName, contentId);
+                    System.out.println("contentId : " + contentId);
+                    System.out.println("contentId : " + contentId);
+                    System.out.println("externalContentRepository : " + externalContentRepository);
+                    System.out.println("externalContentRepository : " + externalContentRepository);
                     //중복검사
-                    if (externalContentRepository.existsById(new ExternalContentKey("COINPAN", contentId))) {
+                    if (externalContentRepository.existsById(id)) {
                         isComplete = true;
                         break;
                     }
@@ -72,6 +83,14 @@ public class CoinpanContentParser implements ContentParser {
                             sb.append(str);
                         }
                     }
+
+                    ExternalContent newContent = new ExternalContent();
+                    newContent.setId(id);
+                    newContent.setTitle(title);
+                    newContent.setContent(sb.toString());
+
+                    return newContent;
+
                 }
             }
 
