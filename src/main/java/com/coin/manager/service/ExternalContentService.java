@@ -54,23 +54,19 @@ public class ExternalContentService {
     }
 
     public List<ExternalContent> newContentList(String memberEmail) {
-        System.out.println(externalContentRepository);
-        System.out.println(externalContentRepository);
-        System.out.println(externalContentRepository);
-        System.out.println(externalContentRepository);
+
         if (memberRepository.findByEmail(memberEmail).isEmpty()) {
             throw new SuchNoMemberException();
         }
 
         List<ExternalContent> newContentList = new ArrayList<>();
+        ContentParserFactory contentParserFactory = new ContentParserFactory();
         for (String externalSiteCode : externalSiteCodeList) {
-            ContentParser parser = ContentParserFactory.getContentParser(externalSiteCode);
+            ContentParser parser = contentParserFactory.getContentParser(externalSiteCode);
             List<ExternalWriter> writerList = externalWriterRepository.findByMemberMemberEmailAndExternalSiteCode(memberEmail, externalSiteCode);
             for (ExternalWriter writer : writerList) {
-                ExternalContent newExternalContent = parser.getNewContent(writer);
-                if (newExternalContent != null) {
-                    newContentList.add(newExternalContent);
-                }
+                ExternalContent recentContentByWriter = parser.getRecentContentByWriter(writer);
+                
             }
         }
 

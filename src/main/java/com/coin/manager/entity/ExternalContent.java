@@ -13,6 +13,9 @@ public class ExternalContent {
     @EmbeddedId
     private ExternalContentKey id;
 
+    @Column(length = 200, nullable = false)
+    private String contentUrl;
+
     @Column(length = 50, nullable = false)
     private String title;
 

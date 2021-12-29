@@ -1,6 +1,6 @@
 USE [coin]
 GO
-/****** Object:  Table [dbo].[external_content]    Script Date: 2021-12-29 오전 7:20:05 ******/
+/****** Object:  Table [dbo].[external_content]    Script Date: 2021-12-30 오전 7:10:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[external_content](
 	[external_site_code] [nvarchar](20) NOT NULL,
 	[content_id] [nvarchar](20) NOT NULL,
 	[nick_name] [nvarchar](50) NOT NULL,
+	[content_url] [nvarchar](200) NULL,
 	[title] [nvarchar](50) NULL,
 	[content] [text] NULL,
 	[comments] [text] NULL,
@@ -22,7 +23,7 @@ CREATE TABLE [dbo].[external_content](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[external_writer]    Script Date: 2021-12-29 오전 7:20:05 ******/
+/****** Object:  Table [dbo].[external_writer]    Script Date: 2021-12-30 오전 7:10:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -41,7 +42,7 @@ CREATE TABLE [dbo].[external_writer](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[member]    Script Date: 2021-12-29 오전 7:20:05 ******/
+/****** Object:  Table [dbo].[member]    Script Date: 2021-12-30 오전 7:10:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

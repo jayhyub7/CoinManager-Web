@@ -4,28 +4,32 @@ import com.coin.manager.entity.ExternalContent;
 import com.coin.manager.entity.ExternalContentKey;
 import com.coin.manager.entity.ExternalWriter;
 import com.coin.manager.repository.ExternalContentRepository;
+import com.coin.manager.repository.MemberRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.service.spi.InjectService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-@RequiredArgsConstructor
-public class CoinpanContentParser extends ContentParser {
+public class CoinpanContentParser implements ContentParser {
+    
+    //닉네임으로 검색하는 URL
+    private final String targetUrl = "https://coinpan.com/?act=&vid=&mid=free&category=&search_target=nick_name&search_keyword=";
 
-    private final ExternalContentRepository externalContentRepository;
-
-    //닉네임으로 검색 URL
-    private static final String targetUrl = "https://coinpan.com/?act=&vid=&mid=free&category=&search_target=nick_name&search_keyword=";
 
     @Override
-    public ExternalContent getNewContent(ExternalWriter externalWriter) {
+    public ExternalContent getRecentContentByWriter(ExternalWriter externalWriter) {
 
         String nickName = externalWriter.getId().getNickName();
         String url = targetUrl + nickName;
@@ -50,15 +54,12 @@ public class CoinpanContentParser extends ContentParser {
                     String contentId = contentUrl.substring(contentUrl.lastIndexOf("=") + 1, contentUrl.length());
 
                     ExternalContentKey id = new ExternalContentKey("COINPAN", nickName, contentId);
-                    System.out.println("contentId : " + contentId);
-                    System.out.println("contentId : " + contentId);
-                    System.out.println("externalContentRepository : " + externalContentRepository);
-                    System.out.println("externalContentRepository : " + externalContentRepository);
-                    //중복검사
-                    if (externalContentRepository.existsById(id)) {
-                        isComplete = true;
-                        break;
-                    }
+                    ExternalContent recentContent = new ExternalContent();
+                    recentContent.setId(id);
+                    recentContent.setContentUrl(contentUrl);
+                    return recentContent;
+
+/*
 
                     Document contentDoc = Jsoup.connect("https://coinpan.com" + contentUrl).get();
 
@@ -90,6 +91,7 @@ public class CoinpanContentParser extends ContentParser {
                     newContent.setContent(sb.toString());
 
                     return newContent;
+*/
 
                 }
             }
