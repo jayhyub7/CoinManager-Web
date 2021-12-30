@@ -61,12 +61,24 @@ public class ExternalContentService {
 
         List<ExternalContent> newContentList = new ArrayList<>();
         ContentParserFactory contentParserFactory = new ContentParserFactory();
+        System.out.println(externalSiteCodeList);
         for (String externalSiteCode : externalSiteCodeList) {
             ContentParser parser = contentParserFactory.getContentParser(externalSiteCode);
             List<ExternalWriter> writerList = externalWriterRepository.findByMemberMemberEmailAndExternalSiteCode(memberEmail, externalSiteCode);
+            System.out.println(writerList);
+            System.out.println(writerList);
             for (ExternalWriter writer : writerList) {
-                ExternalContent recentContentByWriter = parser.getRecentContentByWriter(writer);
-                
+                System.out.println("진입함");
+                ExternalContent recentContent = parser.getRecentContentIndexByWriter(writer);
+                if (externalContentRepository.existsById(recentContent.getId())) {
+                    System.out.println("컨티뉴");    
+                    continue;
+                }
+                ExternalContent newContent = parser.getContentDetail(recentContent);
+                System.out.println(newContent);
+                if (true) return null;
+
+                externalContentRepository.save(newContent);
             }
         }
 

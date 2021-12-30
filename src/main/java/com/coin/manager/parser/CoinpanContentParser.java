@@ -29,7 +29,7 @@ public class CoinpanContentParser implements ContentParser {
 
 
     @Override
-    public ExternalContent getRecentContentByWriter(ExternalWriter externalWriter) {
+    public ExternalContent getRecentContentIndexByWriter(ExternalWriter externalWriter) {
 
         String nickName = externalWriter.getId().getNickName();
         String url = targetUrl + nickName;
@@ -49,50 +49,16 @@ public class CoinpanContentParser implements ContentParser {
                     if (!col.classNames().contains("author")) continue;
                     //닉네임 확인
                     if (!nickName.equals(col.select("a").text())) continue;
+                    System.out.println("cols");
 
-                    String contentUrl = cols.select("td.title").first().child(0).attr("href");
+                    String contentUrl = cols.select("td.title").select("a").attr("href");
                     String contentId = contentUrl.substring(contentUrl.lastIndexOf("=") + 1, contentUrl.length());
-
+                    System.out.println("contentUrl : " + contentUrl);
                     ExternalContentKey id = new ExternalContentKey("COINPAN", nickName, contentId);
                     ExternalContent recentContent = new ExternalContent();
                     recentContent.setId(id);
                     recentContent.setContentUrl(contentUrl);
                     return recentContent;
-
-/*
-
-                    Document contentDoc = Jsoup.connect("https://coinpan.com" + contentUrl).get();
-
-                    String title = contentDoc.select(".board_read").select("h1").text();
-
-
-                    String content = contentDoc.select(".board_read").select(".read_body").select("div.xe_content").html();
-                    Pattern p = Pattern.compile("[<p>](.*?)[</p>]");
-                    Matcher m = p.matcher(content);
-                    String str = null;
-                    StringBuffer sb = new StringBuffer();
-                    while(m.find()) {
-                        str = m.group(1);
-                        str = str.replaceAll("&gt", ">");
-                        str = str.replaceAll("&lt", "<");
-                        if (!str.equals("")) {
-                            if (str.contains("&nbs")) {
-                                str = "\n";
-                            } else {
-                                str = str + "\n";
-                            }
-                            sb.append(str);
-                        }
-                    }
-
-                    ExternalContent newContent = new ExternalContent();
-                    newContent.setId(id);
-                    newContent.setTitle(title);
-                    newContent.setContent(sb.toString());
-
-                    return newContent;
-*/
-
                 }
             }
 
@@ -101,6 +67,43 @@ public class CoinpanContentParser implements ContentParser {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    @Override
+    public ExternalContent getContentDetail(ExternalContent item) {
+        String contentUrl = item.getContentUrl();
+
+        try {
+            Document contentDoc = Jsoup.connect("https://coinpan.com" + contentUrl).get();
+
+            String title = contentDoc.select(".board_read").select("h1").text();
+
+            String content = contentDoc.select(".board_read").select(".read_body").select("div.xe_content").html();
+            Pattern p = Pattern.compile("[<p>](.*?)[</p>]");
+            Matcher m = p.matcher(content);
+            String str = null;
+            StringBuffer sb = new StringBuffer();
+            while(m.find()) {
+                str = m.group(1);
+                str = str.replaceAll("&gt", ">");
+                str = str.replaceAll("&lt", "<");
+                if (!str.equals("")) {
+                    if (str.contains("&nbs")) {
+                        str = "\n";
+                    } else {
+                        str = str + "\n";
+                    }
+                    sb.append(str);
+                }
+            }
+            item.setTitle(title);
+            item.setContent(sb.toString());
+            return item;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
         return null;
     }
 }
