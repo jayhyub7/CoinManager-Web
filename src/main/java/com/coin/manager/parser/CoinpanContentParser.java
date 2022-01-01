@@ -49,11 +49,9 @@ public class CoinpanContentParser implements ContentParser {
                     if (!col.classNames().contains("author")) continue;
                     //닉네임 확인
                     if (!nickName.equals(col.select("a").text())) continue;
-                    System.out.println("cols");
 
                     String contentUrl = cols.select("td.title").select("a").attr("href");
                     String contentId = contentUrl.substring(contentUrl.lastIndexOf("=") + 1, contentUrl.length());
-                    System.out.println("contentUrl : " + contentUrl);
                     ExternalContentKey id = new ExternalContentKey("COINPAN", nickName, contentId);
                     ExternalContent recentContent = new ExternalContent();
                     recentContent.setId(id);

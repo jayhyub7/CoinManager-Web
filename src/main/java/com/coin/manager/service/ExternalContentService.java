@@ -12,6 +12,7 @@ import com.coin.manager.repository.ExternalContentRepository;
 import com.coin.manager.repository.ExternalWriterRepository;
 import com.coin.manager.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExternalContentService {
@@ -61,23 +63,18 @@ public class ExternalContentService {
 
         List<ExternalContent> newContentList = new ArrayList<>();
         ContentParserFactory contentParserFactory = new ContentParserFactory();
-        System.out.println(externalSiteCodeList);
+
         for (String externalSiteCode : externalSiteCodeList) {
             ContentParser parser = contentParserFactory.getContentParser(externalSiteCode);
             List<ExternalWriter> writerList = externalWriterRepository.findByMemberMemberEmailAndExternalSiteCode(memberEmail, externalSiteCode);
-            System.out.println(writerList);
-            System.out.println(writerList);
             for (ExternalWriter writer : writerList) {
-                System.out.println("진입함");
+
                 ExternalContent recentContent = parser.getRecentContentIndexByWriter(writer);
                 if (externalContentRepository.existsById(recentContent.getId())) {
-                    System.out.println("컨티뉴");    
                     continue;
                 }
                 ExternalContent newContent = parser.getContentDetail(recentContent);
-                System.out.println(newContent);
-                if (true) return null;
-
+                log.info(newContent.getId().getNickName() + ": " + newContent.getTitle() + " 등록됨");
                 externalContentRepository.save(newContent);
             }
         }
